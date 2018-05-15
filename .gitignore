@@ -175,13 +175,6 @@ venv.bak/
 
 # End of https://www.gitignore.io/api/opencv
 
-# Created by https://www.gitignore.io/api/jpg
-
-#!! ERROR: jpg is undefined. Use list command to see defined gitignore types !!#
-
-
-# End of https://www.gitignore.io/api/jpg
-
 # Created by https://www.gitignore.io/api/images
 
 ### Images ###
@@ -251,3 +244,6 @@ venv.bak/
 
 
 # End of https://www.gitignore.io/api/images
+
+*.pickle
+
