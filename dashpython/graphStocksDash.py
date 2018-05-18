@@ -8,7 +8,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import pandas_datareader.data as web
 from dash.dependencies import Input, Output
-
+from pandas_datareader._utils import RemoteDataError
 
 
 app = dash.Dash()
@@ -31,20 +31,21 @@ app.layout = html.Div(children=[
 
     Output(component_id='output-graph', component_property='children'),
     [Input(component_id='input', component_property='value')]
-)
+    )
 def update_graph(input_data):
-    
+
     try:
-        
+
         start = datetime.datetime(2015, 1, 1)
         end = datetime.datetime.now()
         df = web.DataReader(input_data, 'quandl', start, end)
-        
+
         return dcc.Graph(
             id='example-graph',
             figure={
                 'data': [
-                    {'x': df.index, 'y': df.Close, 'type': 'line', 'name': input_data}
+                    {'x': df.index, 'y': df.Close,
+                        'type': 'line', 'name': input_data}
                 ],
                 'layout': {
                     'title': input_data
@@ -52,17 +53,14 @@ def update_graph(input_data):
             }
         )
     except AssertionError:
+
         if not input_data:
             return "Please type a ticker, in CAPS"
         else:
             return "Incorrect Ticker"
-    
+    except RemoteDataError:
+        return "Data unavailable for requested ticker"
 
-start = datetime.datetime(2015, 1, 1)
-end = datetime.datetime.now()
-df = web.DataReader('GOOGL', 'quandl', start, end)
 
-print(df.head())
-
-# if __name__ == '__main__':
-#     app.run_server(debug=True)
+if __name__ == '__main__':
+    app.run_server(debug=True)
