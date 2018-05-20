@@ -31,14 +31,18 @@ app.layout = html.Div(children=[
 
     Output(component_id='output-graph', component_property='children'),
     [Input(component_id='input', component_property='value')]
-    )
+)
 def update_graph(input_data):
 
     try:
 
         start = datetime.datetime(2015, 1, 1)
         end = datetime.datetime.now()
-        df = web.DataReader(input_data, 'quandl', start, end)
+        df = web.DataReader(input_data, 'morningstar', start, end)
+        df.reset_index(inplace=True)
+        df.set_index('Date', inplace=True)
+        df = df.drop("Symbol", axis=1)
+
 
         return dcc.Graph(
             id='example-graph',
